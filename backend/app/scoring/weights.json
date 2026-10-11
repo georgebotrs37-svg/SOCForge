@@ -1,0 +1,9 @@
+{
+  "triage_accuracy": 0.15,
+  "severity_assessment": 0.1,
+  "escalation_decision": 0.1,
+  "investigation_quality": 0.2,
+  "response_correctness_and_timing": 0.15,
+  "alert_correlation": 0.1,
+  "report_quality": 0.2
+}

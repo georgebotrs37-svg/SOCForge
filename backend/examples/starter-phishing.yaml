@@ -1,0 +1,61 @@
+schema_version: "1.0"
+id: starter-phishing
+title: Starter phishing investigation
+description: A short example scenario definition for schema validation.
+difficulty: beginner
+estimated_duration_minutes: 30
+environment:
+  hosts:
+    - hostname: WS-014
+      role: workstation
+      operating_system: Windows 11
+      public_facing: false
+  users:
+    - username: j.smith
+      display_name: Jordan Smith
+      department: Finance
+      privileged: false
+  assets:
+    - asset_id: finance-ws-014
+      hostname: WS-014
+      criticality: medium
+      tags: [finance, workstation]
+attack_chains:
+  - chain_id: phishing-chain
+    name: Phishing followed by script execution
+    stages:
+      - stage_key: execution
+        name: User launches a downloaded script
+        technique_ids: [T1204.002, T1059.001]
+        offset_seconds: 120
+        alert_keys: [suspicious-script]
+        parameters: {}
+alerts:
+  - alert_key: suspicious-script
+    title: Suspicious script execution
+    severity: high
+    source: edr
+    offset_seconds: 120
+    details:
+      host: WS-014
+background_noise:
+  events_per_minute: 30
+  sources: [windows_security, sysmon, dns, proxy, firewall]
+  benign_lookalikes: true
+ground_truth:
+  expected_verdict: true_positive
+  expected_severity: high
+  correlated_chain_ids: [phishing-chain]
+  expected_actions:
+    - action_type: isolate_host
+      target_pattern: WS-014
+      required: true
+  rubric:
+    triage_accuracy: 0.2
+    investigation_quality: 0.3
+    response_correctness: 0.3
+    report_quality: 0.2
+constraints:
+  min_duration_seconds: 300
+  max_duration_seconds: 7200
+  requires_evidence_for_containment: true

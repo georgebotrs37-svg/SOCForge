@@ -1,0 +1,2 @@
+"""SOCForge backend application."""
+
